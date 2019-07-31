@@ -57,16 +57,30 @@ namespace Leads_MVVM.ViewModel
 
         private bool CanEnterCommand(object arg)
         {
-            return arg as string != null;
+            bool argumentPassword = Login != ""; 
+            var argumentLogin = arg != null;
+            if (argumentPassword)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void EnterCommand(object obj)
-        {          
+        {
             //TODO реализовать привязку кнопки к обоим полям 
+            if (Login == "" || Password == "")
+            {
+                MessageBox.Show("Заполните поля логин и пароль");
+                return;
+            }
             var _user = context.Пользователи.Where(c => c.Логин == Login && c.Пароль == Password);
             if (_user.Count() != 0)
             {
-                _user.FirstOrDefault();
+                ViewModel.CallsViewModel.User = _user.FirstOrDefault();
                 MessageBox.Show("Пользователь успешно авторизировался");
                 MainMenuView?.Show();
             }
